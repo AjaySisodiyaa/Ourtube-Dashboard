@@ -30,38 +30,36 @@ const Upload = () => {
   };
 
   const submitHandler = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    const formData = new FormData();
-    formData.append("title", title);
-    formData.append("description", description);
-    formData.append("category", category);
-    formData.append("tags", tags);
-    formData.append("video", video);
-    formData.append("thumbnail", thumbnail);
+    try {
+      e.preventDefault();
+      setLoading(true);
+      const formData = new FormData();
+      formData.append("title", title);
+      formData.append("description", description);
+      formData.append("category", category);
+      formData.append("tags", tags);
+      formData.append("video", video);
+      formData.append("thumbnail", thumbnail);
 
-    await axios
-      .post("https://ourtubeapi-1-37sk.onrender.com/video/upload", formData, {
-        headers: {
-          Authorization: "Bearer " + localStorage.getItem("token"),
-        },
-      })
-      .then((res) => {
-        setLoading(false);
-        console.log("video uploaded");
-        alert("Video uploaded");
-        // navigate("/my-video");
-      })
-      // .then(() => {
-      //   toast("Video is uploaded");
-      // })
-      .catch((err) => {
-        alert("Video uploaded");
-        setLoading(false);
-        const message = err.response?.data?.error || "Upload failed";
-        toast.error(message);
-        console.error(message);
-      });
+      await axios.post(
+        "https://ourtubeapi-1-37sk.onrender.com/video/upload",
+        formData,
+        {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("token"),
+          },
+        }
+      );
+      setLoading(false);
+      console.log("video uploaded");
+      alert("Video uploaded");
+    } catch (error) {
+      alert("Video uploaded");
+      setLoading(false);
+      const message = error.response?.data?.error || "Upload failed";
+      toast.error(message);
+      console.error(message);
+    }
   };
 
   return (
