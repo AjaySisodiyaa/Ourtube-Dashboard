@@ -1,0 +1,90 @@
+/* upload video ------------ */
+.upload-container {
+  display: flex;
+  width: 100%;
+  /* min-height: 70vh; */
+  /* height: fit-content; */
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  gap: 10px;
+}
+
+.upload-form {
+  display: flex;
+  flex-direction: column;
+  height: fit-content;
+  padding: 20px;
+  width: 80%;
+  gap: 10px;
+  background-color: #333;
+  color: white;
+  font-size: 20px;
+  font-weight: 600;
+  margin-top: 20px;
+  min-height: 50vh;
+  border-radius: 20px;
+}
+
+.upload-form input,
+textarea,
+select {
+  padding: 10px;
+  height: 40px;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+}
+
+.upload-file-container {
+  display: flex;
+  justify-content: space-around;
+}
+.upload-file {
+  padding: 10px;
+  background-color: #333;
+
+  color: white;
+  width: 150px;
+  height: 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  font-size: 14px;
+}
+.upload-file img {
+  width: 80px;
+}
+
+.upload-form button {
+  height: 50px;
+  background-color: rgb(224, 32, 32);
+  color: white;
+  border: none;
+  cursor: pointer;
+  width: 200px;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  margin: auto;
+}
+.upload-video {
+  max-width: 35vw;
+  max-height: 35vh;
+  min-width: 35vw;
+  /* max-height: 35vh; */
+  width: fit-content;
+  height: fit-content;
+}
+
+.upload-thumbnail {
+  max-width: 35vw;
+  max-height: 35vh;
+  min-width: 35vw;
+  /* max-height: 35vh; */
+  width: fit-content;
+  height: fit-content;
+  object-fit: contain;
+}
