@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import uploadVideo from "../../assets/upload-video.gif";
+
 import uploadImage from "../../assets/upload-image.png";
 import "./Upload.css";
 
@@ -11,19 +11,21 @@ const Upload = () => {
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("");
   const [tags, setTags] = useState("");
-  const [video, setVideo] = useState(null);
+  // const [video, setVideo] = useState(null);
   const [thumbnail, setThumbnail] = useState(null);
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState("");
   const [videoUrl, setVideoUrl] = useState("");
-  const [progress, setProgress] = useState(0);
+  const [mainVideoUrl, setMainVideoUrl] = useState("");
+  // const [progress, setProgress] = useState(0);
+  // const [vUrl, setVUrl] = useState("");
 
   const navigate = useNavigate();
 
-  const videoHandler = (e) => {
-    setVideo(e.target.files[0]);
-    setVideoUrl(URL.createObjectURL(e.target.files[0]));
-  };
+  // const videoHandler = (e) => {
+  //   setVideo(e.target.files[0]);
+  //   setVideoUrl(URL.createObjectURL(e.target.files[0]));
+  // };
   const thumbnailHandler = (e) => {
     setThumbnail(e.target.files[0]);
     setImageUrl(URL.createObjectURL(e.target.files[0]));
@@ -38,7 +40,7 @@ const Upload = () => {
       formData.append("description", description);
       formData.append("category", category);
       formData.append("tags", tags);
-      formData.append("video", video);
+      formData.append("video", videoUrl);
       formData.append("thumbnail", thumbnail);
 
       await axios.post(
@@ -59,6 +61,20 @@ const Upload = () => {
       const message = error.response?.data?.error || "Upload failed";
       toast.error(message);
       console.error(message);
+    }
+  };
+
+  const getVideos = async () => {
+    if (!mainVideoUrl) return;
+    try {
+      const { data } = await axios.post(
+        `http://localhost:4000/video/get-video-url`,
+        { videoUrl: mainVideoUrl }
+      );
+      console.log("data-------------------------->", data);
+      setVideoUrl(data.videoUrl);
+    } catch (err) {
+      console.error(err);
     }
   };
 
@@ -92,19 +108,25 @@ const Upload = () => {
             name="tags"
             placeholder="Tags"
           ></textarea>
+          <input
+            type="text"
+            onChange={(e) => setMainVideoUrl(e.target.value)}
+            name="videoUrl"
+            placeholder="videoUrl"
+          />
+          <div
+            style={{
+              cursor: "pointer",
+              padding: "10px",
+              color: "blue",
+              backgroundColor: "white",
+              textAlign: "center",
+            }}
+            onClick={getVideos}
+          >
+            get video
+          </div>
           <div className="upload-file-container">
-            <label htmlFor="upload-video-label" className="upload-file">
-              Select Video
-              <img src={uploadVideo} alt="" />
-            </label>
-            <input
-              id="upload-video-label"
-              style={{ display: "none" }}
-              type="file"
-              accept="video/*"
-              onChange={videoHandler}
-            />
-
             <label htmlFor="thumbnail" className="upload-file">
               Select Thumbnail
               <img src={uploadImage} alt="" />
@@ -121,41 +143,23 @@ const Upload = () => {
             Upload Video
           </button>
           {loading && <i className="fa-solid fa-circle-notch fa-spin"></i>}
-          {/* 👇 Progress Bar */}
-          {/* {loading && (
-            <div className="progress-bar-wrapper" style={{ margin: "10px 0" }}>
-              <div
-                style={{
-                  width: "100%",
-                  height: "10px",
-                  background: "#eee",
-                  borderRadius: "5px",
-                  overflow: "hidden",
-                }}
-              >
-                <div
-                  style={{
-                    width: `${progress}%`,
-                    height: "100%",
-                    background: "#4caf50",
-                    transition: "width 0.3s ease",
-                  }}
-                ></div>
-              </div>
-              <p style={{ fontSize: "12px" }}>{progress}%</p>
-            </div>
-          )} */}
         </form>
-        <div className="upload-video-content">
-          {videoUrl && (
-            <div>
-              <video className="upload-video" controls src={videoUrl}></video>
-            </div>
-          )}
 
+        <div className="upload-video-content">
           {imageUrl && (
             <img className="upload-thumbnail" src={imageUrl} alt="thumbnail" />
           )}
+        </div>
+        {console.log("last video url --------->", videoUrl)}
+        <div>
+          <iframe
+            id="ad-opener"
+            title="ad-opener"
+            src={videoUrl}
+            height="150px"
+            width="300px"
+            allowFullScreen=""
+          ></iframe>
         </div>
       </div>
     </div>
