@@ -43,7 +43,7 @@ const Upload = () => {
       formData.append("video", videoUrl);
       formData.append("thumbnail", thumbnail);
 
-      await axios.post(
+      const res = await axios.post(
         "https://ourtubeapi-1-37sk.onrender.com/video/upload",
         formData,
         {
@@ -53,7 +53,7 @@ const Upload = () => {
         }
       );
       setLoading(false);
-      console.log("video uploaded");
+      console.log(res.data);
       alert("Video uploaded");
     } catch (error) {
       alert("Video uploaded");
@@ -65,10 +65,13 @@ const Upload = () => {
   };
 
   const getVideos = async () => {
-    if (!mainVideoUrl) return;
+    if (!mainVideoUrl || !mainVideoUrl.startsWith("http")) {
+      toast.error("Please enter a valid URL");
+      return;
+    }
     try {
       const { data } = await axios.post(
-        `http://localhost:4000/video/get-video-url`,
+        `https://ourtubeapi-1-37sk.onrender.com/video/get-video-url`,
         { videoUrl: mainVideoUrl }
       );
       console.log("data-------------------------->", data);
@@ -152,14 +155,16 @@ const Upload = () => {
         </div>
         {console.log("last video url --------->", videoUrl)}
         <div>
-          <iframe
-            id="ad-opener"
-            title="ad-opener"
-            src={videoUrl}
-            height="150px"
-            width="300px"
-            allowFullScreen=""
-          ></iframe>
+          {videoUrl && (
+            <iframe
+              id="ad-opener"
+              title="ad-opener"
+              src={videoUrl}
+              height="150px"
+              width="300px"
+              allowFullScreen
+            ></iframe>
+          )}
         </div>
       </div>
     </div>
